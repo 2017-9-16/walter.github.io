@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>基于Tensorflow利用全连接网络实现简单的图片识别 | HZcheney|AE86 | 藤原とうふ店(自家用)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="基于Tensorflow利用全连接网络实现简单的图片识别 摘要：本文讨论了当前炙手可热的Tensorflow机器学习框架，并基于此框架构建最基本的图片识别神经网络。 关键词： 机器学习 Tensorflow 人工智能 图像识别 近几年，人工智能超越移动互联网成为新的网络热点，其实人工智能这个概念最早在上世纪五十年代就已经被提出。图灵1950年在其论文《机器能思考吗？》中提出了图灵测试，一种用于判定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Tensorflow利用全连接网络实现简单的图片识别">
+<meta property="og:url" content="https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/index.html">
+<meta property="og:site_name" content="HZcheney|AE86">
+<meta property="og:description" content="基于Tensorflow利用全连接网络实现简单的图片识别 摘要：本文讨论了当前炙手可热的Tensorflow机器学习框架，并基于此框架构建最基本的图片识别神经网络。 关键词： 机器学习 Tensorflow 人工智能 图像识别 近几年，人工智能超越移动互联网成为新的网络热点，其实人工智能这个概念最早在上世纪五十年代就已经被提出。图灵1950年在其论文《机器能思考吗？》中提出了图灵测试，一种用于判定">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2018-08-21T13:01:46.118Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于Tensorflow利用全连接网络实现简单的图片识别">
+<meta name="twitter:description" content="基于Tensorflow利用全连接网络实现简单的图片识别 摘要：本文讨论了当前炙手可热的Tensorflow机器学习框架，并基于此框架构建最基本的图片识别神经网络。 关键词： 机器学习 Tensorflow 人工智能 图像识别 近几年，人工智能超越移动互联网成为新的网络热点，其实人工智能这个概念最早在上世纪五十年代就已经被提出。图灵1950年在其论文《机器能思考吗？》中提出了图灵测试，一种用于判定">
+    
+        <link rel="alternate" type="application/atom+xml" title="HZcheney|AE86" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">HZcheney</h5>
+          <a href="mailto:403915019@qq.com" title="403915019@qq.com" class="mail">403915019@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/hzcheney" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">基于Tensorflow利用全连接网络实现简单的图片识别</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="検索">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">基于Tensorflow利用全连接网络实现简单的图片识别</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-08-21T13:01:45.000Z" itemprop="datePublished" class="page-time">
+  2018-08-21
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-基于Tensorflow利用全连接网络实现简单的图片识别-1"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">基于Tensorflow利用全连接网络实现简单的图片识别</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-08-21 21:01:45" datetime="2018-08-21T13:01:45.000Z"  itemprop="datePublished">2018-08-21</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>基于Tensorflow利用全连接网络实现简单的图片识别</p>
+<p>摘要：本文讨论了当前炙手可热的Tensorflow机器学习框架，并基于此框架构建最基本的图片识别神经网络。</p>
+<p>关键词： 机器学习 Tensorflow 人工智能 图像识别</p>
+<p>近几年，人工智能超越移动互联网成为新的网络热点，其实人工智能这个概念最早在上世纪五十年代就已经被提出。图灵1950年在其论文《机器能思考吗？》中提出了图灵测试，一种用于判定机器是否具有智能的实验方法。然后人工智能的发展并不是一帆风顺，其间经历了三次高潮与两次没落，到了今天，由于深层次神经网络出现，以及卷积神经网络在图像识别领域的惊人表现，人工智能研究又一次被推上了时代的潮头。本文首先简要分析人工智能，机器学习，深度学习三者的关系，其次利用谷歌公司发布的Tensorflow机器学习框架实现简单的图片识别。</p>
+<p>一、人工智能、机器学习、深度学习三者的关系</p>
+<p>（一）概念</p>
+<p>1、人工智能的概念</p>
+<p>人工智能（AI），有时被称为机器智能，是机器所展示的智能，与人类和其他动物所展示的自然智能相反。[1]简而言之，人工智能就是机器模拟人的思维和意识，图灵在他那篇著名的论文中预测2000年会出现通过人工智能的机器，然而直到2014年6月，英国雷丁大学的聊天程序才成功冒充了13岁男孩，通过了图灵测试。</p>
+<p>2、机器学习的概念</p>
+<p>机器学习是计算机科学领域中的人工智能的子集，其经常使用统计技术来使计算机能够利用数据“学习”（即，逐步提高特定任务的性能），而无需明确编程。[2]也就是说，机器学习是一种利用统计学的方法，计算机利用已有数据得出某种模型，再利用此模型预测结果。与传统计算机运算的区别在于，传统计算机基于冯诺依曼结构，指令预先存储，运行时CPU按部就班的执行预先取出的指令，因此机器执行的结果已经人为确定。</p>
+<p>2、深度学习的概念</p>
+<p>深度学习（也称为深度结构化学习或分层学习）是基于学习数据表示的更广泛的机器学习方法系列的一部分，而不是特定于任务的算法。<br>深度学习可以是监督式，半监督式或无监督式。[3]亦即深层次神经网络，这种研究源自对生物脑神经元的研究，生物学中，神经元包括树突，细胞核，轴突等。其中，树突是神经元的输入，轴突是神经元的输出，人脑便是由860亿个这样的神经元组成，所有的思维意识，都以它为基本单元连接成网络而实现。1943年，心理学家McCulloch和数学家Pitts参考了生物神经元的结构，发表了抽象的计算机神经元模型MP。拥有类比于神经元的输入输出和计算功能。</p>
+<p>（二）三者之间的关系</p>
+<p>人工智能、机器学习、深度学习属于包含性的关系，人工智能是一个很宽泛的概念，广义化的指机器模拟人的意识和思维；而机器学习则是实现人工智能的一种方法，是人工智能的子集；深度学习指的就是深层次神经网络，是机器学习的一种实现方法，又是机器学习的子集。本文接下来的部分着重介绍神经网络的搭建与简单实践。</p>
+<p>二、基于Tensorflow的全连接网络基础</p>
+<p>（一）神经网络的搭建</p>
+<p>1、mnist数据集</p>
+<p>包含 7 万张黑底白字手写数字图片，其中 55000 张为训练集，5000 张为验证集，10000<br>张为测试集。每张图片大小为 28*28 像素，图片中纯黑色像素值为 0，纯白色像素值为<br>1。数据集的标签是长度为 10<br>的一维数组，数组中每个元素索引号表示对应数字出现的概率。将一张数字手写体图片变成长度为<br>784 的一维数组，0-1之间对应着色彩的不同比例，例如[0.0.0.0.0.231 0.235<br>0.459……0.219<br>0.0.0.0.]。若该图片对应的标签为[0.0.0.0.0.0.1.0.0.0]，标签中索引号为 6 的元素为<br>1，表示是数字 6 出现的概率为 100%，则该图片对应的识别结果是 6。</p>
+<p>2、搭建过程</p>
+<p>神经网络搭建过程包括前向传播过程、反向传播过程、正则化、指数衰减学习率、滑动平均方法的设置、以及测试模块。</p>
+<ol>
+<li>前向传播过程</li>
+</ol>
+<blockquote>
+<p>在前向传播过程中，需要定义网络模型输入层个数、隐藏节点数、输出层个数，定义网络参数w、偏置b，定义由输入到输出的神经网络结构。</p>
+</blockquote>
+<blockquote>
+<p>def forward(x, regularizer):</p>
+</blockquote>
+<blockquote>
+<p>w= b= return y</p>
+</blockquote>
+<blockquote>
+<p>def get_weight(shape, regularizer):</p>
+</blockquote>
+<blockquote>
+<p>def get_bias(shape):<br>其中get_weight()函数实现对参数w的设置,get_bias()实现对偏置b的设置。</p>
+</blockquote>
+<ol>
+<li>反向传播过程</li>
+</ol>
+<blockquote>
+<p>在反向传播过程中，首先引入 tensorflow、input_data、前向传播 mnist_forward 和<br>os<br>模块，定义每轮喂入神经网络的图片数、初始学习率、学习率衰减率、正则化系数、训练轮数、模型保存路径以及模型保存名称等相关信息。在反向传播函数<br>backword 中，首先读入 mnist，用 placeholder 给训练数据 x 和标签 y_占位，调用<br>mnist_forward 文件中的前向传播过程<br>forword()函数，并设置正则化，计算训练数据集上的预测结果<br>y，并给当前计算轮数计数器赋值，设定为不可训练类型。接着，调用包含所有参数正则化损失的损失函数loss，并设定指数衰减学习率<br>learning_rate。然后，使用梯度衰减算法对模型优化，降低损失函数，并定义参数的滑动平均。最后，在<br>with 结构中，实现所有参数初始化，每次喂入 batch_size 组（即 200<br>组）训练数据和对应标签，循环迭代 steps 轮，并每隔 1000<br>轮打印出一次损失函数值信息，并将当前会话加载到指定路径。最后，通过主函数<br>main()，加载指定路径下的训练数据集，并调用规定的 backward()函数训练模型。</p>
+</blockquote>
+<ol>
+<li>测试过程</li>
+</ol>
+<blockquote>
+<p>首先需要引入 time<br>模块、tensorflow、input_data、前向传播mnist_forward、反向传播 mnist_backward<br>模块和 os 模块，并规定程序 5 秒的循环间隔时间。接着，定义测试函数<br>test(),读入 mnist 数据集，利用 tf.Graph()复现之前定义的计算图，利用<br>placeholder 给训练数据 x 和标签 y_占位，调用mnist_forward<br>文件中的前向传播过程 forword()函数，计算训练数据集上的预测结果<br>y。接着，实例化具有滑动平均的 saver<br>对象，从而在会话被加载时模型中的所有参数被赋值为各自的滑动平均值，增强模型的稳定性，然后计算模型在测试集上的准确率。在<br>with 结构中，加载指定路径下的<br>ckpt，若模型存在，则加载出模型到当前对话，在测试数据集上进行准确率验证，并打印出当前轮数下的准确率，若模型不存在，则打印出模型不存在的提示，从而<br>test()函数完成。 通过主函数 main()，加载指定路径下的测试数据集，并调用规定的<br>test 函数，进行模型在测试集上的准确率验证。</p>
+</blockquote>
+<p>（二）图像识别实践</p>
+<p>三、规模化经营的现状</p>
+<p>……</p>
+<p>参考资料：</p>
+<p>[1]维基百科. <a href="https://en.wikipedia.org/wiki/Artificial_intelligence" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Artificial_intelligence</a></p>
+<p>[2] Samuel, Arthur (1959). “Some Studies in Machine Learning Using the Game of<br>Checkers”. IBM Journal of Research and Development.</p>
+<p>[3]Bengio, Y.; Courville, A.; Vincent, P. (2013). “Representation Learning: A<br>Review and New Perspectives”. IEEE Transactions on Pattern Analysis and Machine<br>Intelligenc.</p>
+<p>[4]</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最終更新：<time datetime="2018-08-21T13:01:46.118Z" itemprop="dateUpdated">2018-08-21 21:01:46</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/" target="_blank" rel="external">https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://hzcheney.github.io">
+            <img src="/img/avatar.jpg" alt="HZcheney">
+            HZcheney
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/&title=《基于Tensorflow利用全连接网络实现简单的图片识别》 — HZcheney|AE86&pic=https://hzcheney.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/&title=《基于Tensorflow利用全连接网络实现简单的图片识别》 — HZcheney|AE86&source=秋名山上行人稀，常有车手较高低。如今车道依旧在，不见当年老司机|code" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《基于Tensorflow利用全连接网络实现简单的图片识别》 — HZcheney|AE86&url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/&via=https://hzcheney.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/08/21/hello-world/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hello World</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>このブログの内容物は<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際ライセンスの下に提供されています</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>HZcheney &copy; 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/&title=《基于Tensorflow利用全连接网络实现简单的图片识别》 — HZcheney|AE86&pic=https://hzcheney.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/&title=《基于Tensorflow利用全连接网络实现简单的图片识别》 — HZcheney|AE86&source=秋名山上行人稀，常有车手较高低。如今车道依旧在，不见当年老司机|code" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《基于Tensorflow利用全连接网络实现简单的图片识别》 — HZcheney|AE86&url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/&via=https://hzcheney.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://hzcheney.github.io/2018/08/21/基于Tensorflow利用全连接网络实现简单的图片识别-1/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
