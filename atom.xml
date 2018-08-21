@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>HZcheney|AE86</title>
   
-  
+  <subtitle>藤原とうふ店(自家用)</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://walter.github.io/"/>
+  <link href="https://hzcheney.github.io/"/>
   <updated>2018-08-21T04:59:11.781Z</updated>
-  <id>http://walter.github.io/</id>
+  <id>https://hzcheney.github.io/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>HZcheney</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://walter.github.io/2018/08/21/hello-world/"/>
-    <id>http://walter.github.io/2018/08/21/hello-world/</id>
+    <link href="https://hzcheney.github.io/2018/08/21/hello-world/"/>
+    <id>https://hzcheney.github.io/2018/08/21/hello-world/</id>
     <published>2018-08-21T04:59:11.781Z</published>
     <updated>2018-08-21T04:59:11.781Z</updated>
     
